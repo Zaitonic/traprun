@@ -1,0 +1,20 @@
+{
+  "name": "trap-run",
+  "version": "1.0.0",
+  "description": "TRAP RUN — A challenging 2D trap-based platformer with local multiplayer and persistent leaderboard",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "build": "echo 'Static build ready'"
+  },
+  "keywords": ["game", "platformer", "trap", "2d", "canvas"],
+  "author": "Trap Run Team",
+  "license": "MIT",
+  "dependencies": {
+    "sql.js": "^1.11.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "helmet": "^8.0.0"
+  }
+}

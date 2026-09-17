@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="description" content="TRAP RUN — A challenging 2D trap-based platformer. Dodge traps, survive levels, compete on the leaderboard!">
+  <title>TRAP RUN — Trap Platformer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Kanit:ital,wght@1,800;1,900&family=Russo+One&family=Bungee&family=Inter:wght@400;600;700;900&family=Oxanium:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="game-wrapper">
+    <canvas id="game-canvas"></canvas>
+    
+    <!-- UI Overlay -->
+    <div id="ui-overlay">
+      
+      <!-- Main Menu -->
+      <div id="screen-menu" class="screen active">
+        <canvas id="menu-bg-canvas" class="menu-bg-canvas" aria-hidden="true" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+        <div class="menu-fire-bank menu-fire-bank-left" aria-hidden="true">
+          <span class="menu-flame menu-flame-tall"></span>
+          <span class="menu-flame menu-flame-mid"></span>
+          <span class="menu-flame menu-flame-low"></span>
+          <i class="menu-ember ember-one"></i><i class="menu-ember ember-two"></i><i class="menu-ember ember-three"></i>
+        </div>
+        <div class="menu-fire-bank menu-fire-bank-right" aria-hidden="true">
+          <span class="menu-flame menu-flame-tall"></span>
+          <span class="menu-flame menu-flame-mid"></span>
+          <span class="menu-flame menu-flame-low"></span>
+          <i class="menu-ember ember-one"></i><i class="menu-ember ember-two"></i><i class="menu-ember ember-three"></i>
+        </div>
+        <div class="menu-container">
+          <div class="logo-container sf-logo-container">
+            <div class="menu-skull-stage" aria-hidden="true">
+              <span class="menu-skull-spark menu-skull-spark-a">✦</span>
+              <span class="menu-skull-spark menu-skull-spark-b">✦</span>
+              <span class="menu-skull-spark menu-skull-spark-c">✦</span>
+              <div class="menu-skull">
+                <span class="menu-skull-eye menu-skull-eye-left"></span>
+                <span class="menu-skull-eye menu-skull-eye-right"></span>
+                <span class="menu-skull-nose"></span>
+                <span class="menu-skull-jaw"></span>
+              </div>
+            </div>
+
+            <!-- Street Fighter Style Custom Title -->
+            <div class="sf-title-wrapper">
+              <div class="sf-energy-aura" aria-hidden="true"></div>
+              <h1 class="game-logo sf-logo" aria-label="TRAP RUN">
+                <span class="sf-word sf-trap" data-text="TRAP"><span class="sf-letter">T</span><span class="sf-letter">R</span><span class="sf-letter">A</span><span class="sf-letter">P</span></span><span class="sf-word sf-run" data-text="RUN"><span class="sf-letter">R</span><span class="sf-letter">U</span><span class="sf-letter">N</span></span>
+              </h1>
+              <div class="sf-challenger-banner">
+                <span class="sf-banner-bracket">«</span>
+                <span class="logo-subtitle">CAN YOU SURVIVE?</span>
+                <span class="sf-banner-bracket">»</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-buttons">
+            <button id="btn-play" class="btn btn-3d btn-3d-primary btn-large">
+              <span class="btn-3d-sheen" aria-hidden="true"></span>
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg icon-play-3d" viewBox="0 0 28 28" width="26" height="26" fill="none" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="pFace" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#ffffff"/>
+                      <stop offset="35%" stop-color="#fff0f3"/>
+                      <stop offset="100%" stop-color="#ff758f"/>
+                    </linearGradient>
+                    <linearGradient id="pSide" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#c9184a"/>
+                      <stop offset="100%" stop-color="#590d22"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M5 4 L23 14 L23 17.5 L5 26.5 Z" fill="url(#pSide)"/>
+                  <path d="M23 14 L24.5 15.2 L23 17.5 Z" fill="#380413"/>
+                  <polygon points="5,4 23,14 5,23.5" fill="url(#pFace)"/>
+                  <polygon points="5,4 15,9.5 5,12.5" fill="rgba(255,255,255,0.9)"/>
+                </svg>
+              </span>
+              <span class="btn-text">PLAY</span>
+            </button>
+
+            <button id="btn-leaderboard" class="btn btn-3d btn-3d-secondary">
+              <span class="btn-3d-sheen" aria-hidden="true"></span>
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg icon-trophy-3d" viewBox="0 0 28 28" width="26" height="26" fill="none" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="tCup" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#fff9db"/>
+                      <stop offset="30%" stop-color="#ffda44"/>
+                      <stop offset="70%" stop-color="#f59e0b"/>
+                      <stop offset="100%" stop-color="#b45309"/>
+                    </linearGradient>
+                    <linearGradient id="tBase" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#d97706"/>
+                      <stop offset="100%" stop-color="#78350f"/>
+                    </linearGradient>
+                  </defs>
+                  <ellipse cx="14" cy="25" rx="8" ry="2" fill="rgba(0,0,0,0.5)"/>
+                  <rect x="7" y="21" width="14" height="3" rx="1" fill="url(#tBase)"/>
+                  <polygon points="7,21 21,21 19,19 9,19" fill="#fef08a"/>
+                  <rect x="10" y="17" width="8" height="3" rx="0.5" fill="url(#tBase)"/>
+                  <path d="M12.5 14 L15.5 14 L14.8 17 L13.2 17 Z" fill="#92400e"/>
+                  <path d="M7 6 C3.5 6 3.5 11 7 12 L7 10.5 C5 10 5 7.5 7 7.5 Z" fill="#b45309"/>
+                  <path d="M21 6 C24.5 6 24.5 11 21 12 L21 10.5 C23 10 23 7.5 21 7.5 Z" fill="#fde047"/>
+                  <path d="M7 5 L21 5 C21 5 21 13.5 14 14.5 C7 13.5 7 5 7 5 Z" fill="url(#tCup)"/>
+                  <ellipse cx="14" cy="5" rx="7" ry="1.6" fill="#fffbeb"/>
+                  <polygon points="14,7.5 14.8,9.5 17,9.5 15.2,10.8 15.9,12.8 14,11.5 12.1,12.8 12.8,10.8 11,9.5 13.2,9.5" fill="#ffffff"/>
+                </svg>
+              </span>
+              <span class="btn-text">LEADERBOARD</span>
+            </button>
+
+            <button id="btn-my-record" class="btn btn-3d btn-3d-secondary">
+              <span class="btn-3d-sheen" aria-hidden="true"></span>
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg icon-record-3d" viewBox="0 0 28 28" width="26" height="26" fill="none" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="cTop1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0284c7"/></linearGradient>
+                    <linearGradient id="cSide1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0369a1"/><stop offset="100%" stop-color="#082f49"/></linearGradient>
+                    <linearGradient id="cTop2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fb7185"/><stop offset="100%" stop-color="#e11d48"/></linearGradient>
+                    <linearGradient id="cSide2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#9f1239"/><stop offset="100%" stop-color="#4c0519"/></linearGradient>
+                    <linearGradient id="cTop3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#16a34a"/></linearGradient>
+                    <linearGradient id="cSide3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#15803d"/><stop offset="100%" stop-color="#052e16"/></linearGradient>
+                  </defs>
+                  <ellipse cx="14" cy="24" rx="11" ry="2.5" fill="rgba(0,0,0,0.5)"/>
+                  <polygon points="4,13 8,11 11,13 7,15" fill="url(#cTop1)"/>
+                  <polygon points="4,13 7,15 7,22 4,20" fill="#0c4a6e"/>
+                  <polygon points="7,15 11,13 11,20 7,22" fill="url(#cSide1)"/>
+                  <polygon points="10,7 15,5 18,7 13,9" fill="url(#cTop2)"/>
+                  <polygon points="10,7 13,9 13,22 10,20" fill="#881337"/>
+                  <polygon points="13,9 18,7 18,20 13,22" fill="url(#cSide2)"/>
+                  <polygon points="17,16 21,14 24,16 20,18" fill="url(#cTop3)"/>
+                  <polygon points="17,16 20,18 20,22 17,20" fill="#14532d"/>
+                  <polygon points="20,18 24,16 24,20 20,22" fill="url(#cSide3)"/>
+                </svg>
+              </span>
+              <span class="btn-text">MY RECORD</span>
+            </button>
+
+            <button id="btn-settings" class="btn btn-3d btn-3d-secondary">
+              <span class="btn-3d-sheen" aria-hidden="true"></span>
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg icon-gear-3d" viewBox="0 0 28 28" width="26" height="26" fill="none" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="gBevel" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#f8fafc"/>
+                      <stop offset="35%" stop-color="#cbd5e1"/>
+                      <stop offset="70%" stop-color="#64748b"/>
+                      <stop offset="100%" stop-color="#334155"/>
+                    </linearGradient>
+                    <linearGradient id="gDepth" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#1e293b"/>
+                      <stop offset="100%" stop-color="#0f172a"/>
+                    </linearGradient>
+                  </defs>
+                  <circle cx="14" cy="16" r="10.5" fill="url(#gDepth)"/>
+                  <path d="M12,2 L16,2 L16.4,5.2 C17.3,5.6 18.2,6.1 19,6.8 L22,5.5 L24.2,7.7 L22.9,10.7 C23.6,11.5 24.1,12.4 24.5,13.3 L27.7,13.7 L27.7,16.9 L24.5,17.3 C24.1,18.2 23.6,19.1 22.9,19.9 L24.2,22.9 L22,25.1 L19,23.8 C18.2,24.5 17.3,25 16.4,25.4 L16,28.6 L12,28.6 L11.6,25.4 C10.7,25 9.8,24.5 9,23.8 L6,25.1 L3.8,22.9 L5.1,19.9 C4.4,19.1 3.9,18.2 3.5,17.3 L0.3,16.9 L0.3,13.7 L3.5,13.3 C3.9,12.4 4.4,11.5 5.1,10.7 L3.8,7.7 L6,5.5 L9,6.8 C9.8,6.1 10.7,5.6 11.6,5.2 Z" transform="scale(0.85) translate(2.5, 2)" fill="url(#gBevel)"/>
+                  <circle cx="14.4" cy="14" r="4.2" fill="#0f172a"/>
+                  <circle cx="14.4" cy="14" r="2.8" fill="#020617"/>
+                  <circle cx="14" cy="13.5" r="1.3" fill="#94a3b8"/>
+                </svg>
+              </span>
+              <span class="btn-text">SETTINGS</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Name Entry -->
+      <div id="screen-name" class="screen">
+        <div class="panel">
+          <h2 class="panel-title">ENTER YOUR NAME</h2>
+          <div class="name-input-container">
+            <input type="text" id="input-name" class="name-input" placeholder="Your name..." maxlength="20" autocomplete="off" spellcheck="false">
+            <p id="name-error" class="error-text"></p>
+          </div>
+          <div class="name-buttons">
+            <button id="btn-start-game" class="btn btn-3d btn-3d-primary btn-large">
+              <span class="btn-3d-sheen" aria-hidden="true"></span>
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 28 28" width="22" height="22" fill="none" aria-hidden="true">
+                  <rect x="3" y="7" width="22" height="15" rx="7.5" fill="#e11d48"/>
+                  <rect x="3" y="6" width="22" height="14" rx="7" fill="#fb7185"/>
+                  <rect x="7" y="11" width="3" height="5" rx="1" fill="#ffffff"/>
+                  <rect x="6" y="12" width="5" height="3" rx="1" fill="#ffffff"/>
+                  <circle cx="18" cy="12" r="1.5" fill="#fef08a"/>
+                  <circle cx="21" cy="14.5" r="1.5" fill="#67e8f9"/>
+                </svg>
+              </span>
+              <span class="btn-text">START GAME</span>
+            </button>
+            <button id="btn-name-back" class="btn btn-3d btn-3d-ghost">
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M19 12H5M5 12L11 6M5 12L11 18"/>
+                </svg>
+              </span>
+              <span class="btn-text">BACK HOME</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Welcome Screen -->
+      <div id="screen-welcome" class="screen">
+        <div class="panel">
+          <h2 class="welcome-text">Welcome, <span id="welcome-name"></span>!</h2>
+          <p class="welcome-sub">Get ready to run...</p>
+          <div class="welcome-controls">
+            <div class="control-hint"><kbd>←</kbd><kbd>→</kbd> or <kbd>A</kbd><kbd>D</kbd> Move</div>
+            <div class="control-hint"><kbd>Space</kbd> or <kbd>↑</kbd> or <kbd>W</kbd> Jump — press again in air</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage Loading — skull warning before every new stage -->
+      <div id="screen-loading" class="screen">
+        <div class="loading-ritual" role="status" aria-live="polite">
+          <div class="skull-orbit" aria-hidden="true">
+            <span class="orbit-mark orbit-mark-a">✦</span>
+            <span class="orbit-mark orbit-mark-b">✦</span>
+            <span class="orbit-mark orbit-mark-c">✦</span>
+            <div class="skull-loader">
+              <span class="skull-eye skull-eye-left"></span>
+              <span class="skull-eye skull-eye-right"></span>
+              <span class="skull-nose"></span>
+              <span class="skull-jaw"></span>
+            </div>
+          </div>
+          <p class="loading-kicker">THE ROOM IS WATCHING</p>
+          <h2 id="loading-stage" class="loading-stage">PREPARING STAGE</h2>
+          <div class="loading-track" aria-hidden="true"><span></span></div>
+          <p id="loading-hint" class="loading-hint">Do not trust the floor.</p>
+        </div>
+      </div>
+
+      <!-- HUD (during gameplay) -->
+      <div id="hud" class="hud hidden">
+        <div class="hud-left">
+          <button id="btn-hud-menu" class="hud-btn-menu" aria-label="Pause Menu">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="4" y1="7" x2="20" y2="7"/>
+              <line x1="4" y1="12" x2="20" y2="12"/>
+              <line x1="4" y1="17" x2="20" y2="17"/>
+            </svg>
+            <span>MENU</span>
+          </button>
+          <span class="hud-item hud-player" id="hud-player">Player</span>
+          <span class="hud-item hud-level" id="hud-level">Level 1</span>
+        </div>
+        <div class="hud-right">
+          <span class="hud-item hud-deaths" id="hud-deaths">
+            <span class="hud-3d-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" width="16" height="16" fill="none">
+                <circle cx="10" cy="9" r="7" fill="#ef4444"/>
+                <circle cx="10" cy="8.5" r="6" fill="#fee2e2"/>
+                <circle cx="7.5" cy="8" r="1.8" fill="#18181b"/>
+                <circle cx="12.5" cy="8" r="1.8" fill="#18181b"/>
+                <circle cx="7.5" cy="8" r="0.8" fill="#ef4444"/>
+                <circle cx="12.5" cy="8" r="0.8" fill="#ef4444"/>
+                <path d="M10 10.5 L8.5 12.5 L11.5 12.5 Z" fill="#27272a"/>
+                <rect x="7" y="14" width="6" height="3" rx="0.5" fill="#f43f5e"/>
+                <rect x="7.5" y="13.5" width="5" height="3" rx="0.5" fill="#fee2e2"/>
+                <line x1="9" y1="13.5" x2="9" y2="16.5" stroke="#71717a" stroke-width="0.8"/>
+                <line x1="11" y1="13.5" x2="11" y2="16.5" stroke="#71717a" stroke-width="0.8"/>
+              </svg>
+            </span>
+            <span id="hud-deaths-val">0</span>
+          </span>
+          <span class="hud-item hud-timer" id="hud-timer">
+            <span class="hud-3d-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" width="16" height="16" fill="none">
+                <circle cx="10" cy="11" r="7.5" fill="#0284c7"/>
+                <circle cx="10" cy="10.5" r="6.5" fill="#0f172a"/>
+                <circle cx="10" cy="10.5" r="5" fill="#38bdf8" fill-opacity="0.15"/>
+                <line x1="10" y1="5.5" x2="10" y2="10.5" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round"/>
+                <line x1="10" y1="10.5" x2="13.5" y2="10.5" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round"/>
+                <rect x="8.5" y="1.5" width="3" height="2" rx="0.5" fill="#0284c7"/>
+                <circle cx="10" cy="10.5" r="1.5" fill="#ffffff"/>
+              </svg>
+            </span>
+            <span id="hud-timer-val">0:00</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Pause Screen -->
+      <div id="screen-pause" class="screen">
+        <div class="panel panel-pause">
+          <h2 class="panel-title panel-title-3d">
+            <span class="title-3d-badge silver">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="8" y1="5" x2="8" y2="19"/>
+                <line x1="16" y1="5" x2="16" y2="19"/>
+              </svg>
+            </span>
+            GAME PAUSED
+          </h2>
+          <div class="pause-stats">
+            <div class="stat-row"><span class="stat-label">Player</span><span class="stat-value" id="pause-player"></span></div>
+            <div class="stat-row"><span class="stat-label">Level</span><span class="stat-value" id="pause-level"></span></div>
+            <div class="stat-row"><span class="stat-label">Deaths</span><span class="stat-value" id="pause-deaths"></span></div>
+            <div class="stat-row"><span class="stat-label">Time</span><span class="stat-value" id="pause-time"></span></div>
+          </div>
+          <div class="pause-buttons">
+            <button id="btn-pause-resume" class="btn btn-3d btn-3d-primary btn-large">
+              <span class="btn-3d-sheen" aria-hidden="true"></span>
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" stroke="none" aria-hidden="true">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+              </span>
+              <span class="btn-text">RESUME GAME</span>
+            </button>
+            <button id="btn-pause-restart" class="btn btn-3d btn-3d-secondary">
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/>
+                </svg>
+              </span>
+              <span class="btn-text">RESTART LEVEL (R)</span>
+            </button>
+            <button id="btn-pause-menu" class="btn btn-3d btn-3d-secondary">
+              <span class="btn-3d-sheen" aria-hidden="true"></span>
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+              </span>
+              <span class="btn-text">BACK HOME</span>
+            </button>
+            <button id="btn-pause-leaderboard" class="btn btn-3d btn-3d-ghost">
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+                </svg>
+              </span>
+              <span class="btn-text">VIEW LEADERBOARD</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Death Screen -->
+      <div id="screen-death" class="screen">
+        <div class="panel panel-death">
+          <button id="btn-death-quick-exit" class="panel-quick-exit" aria-label="Back Home" title="Back Home (Esc)">✕</button>
+          <h2 class="death-title">YOU DIED!</h2>
+          <div class="death-stats">
+            <div class="stat-row"><span class="stat-label">Player</span><span class="stat-value" id="death-player"></span></div>
+            <div class="stat-row"><span class="stat-label">Level</span><span class="stat-value" id="death-level"></span></div>
+            <div class="stat-row"><span class="stat-label">Deaths</span><span class="stat-value" id="death-deaths"></span></div>
+            <div class="stat-row"><span class="stat-label">Time</span><span class="stat-value" id="death-time"></span></div>
+          </div>
+          <div class="death-buttons">
+            <button id="btn-play-again" class="btn btn-3d btn-3d-primary btn-large">
+              <span class="btn-3d-sheen" aria-hidden="true"></span>
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>
+              </span>
+              <span class="btn-text">TRY AGAIN</span>
+            </button>
+            <button id="btn-death-menu" class="btn btn-3d btn-3d-secondary btn-large">
+              <span class="btn-3d-sheen" aria-hidden="true"></span>
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+              </span>
+              <span class="btn-text">BACK HOME</span>
+            </button>
+            <button id="btn-death-leaderboard" class="btn btn-3d btn-3d-ghost">
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+              </span>
+              <span class="btn-text">VIEW LEADERBOARD</span>
+            </button>
+          </div>
+          <div class="death-shortcut-hint">
+            <span><kbd>Space</kbd> / <kbd>R</kbd> Retry</span>
+            <span class="hint-divider">•</span>
+            <span><kbd>Esc</kbd> Back Home</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Level Complete -->
+      <div id="screen-level-complete" class="screen">
+        <div class="panel panel-success">
+          <h2 class="level-complete-title">LEVEL COMPLETE!</h2>
+          <p class="level-complete-sub" id="level-complete-text">Level 1 cleared!</p>
+          <p class="level-complete-next">Next level loading...</p>
+        </div>
+      </div>
+
+      <!-- Quit Confirmation -->
+      <div id="screen-quit-confirm" class="screen">
+        <div class="panel">
+          <h2 class="panel-title">BACK HOME?</h2>
+          <p class="confirm-text">Your run accomplishment will be saved to the leaderboard.</p>
+          <div class="confirm-stats">
+            <div class="stat-row"><span class="stat-label">Highest Level</span><span class="stat-value" id="quit-level"></span></div>
+            <div class="stat-row"><span class="stat-label">Deaths</span><span class="stat-value" id="quit-deaths"></span></div>
+            <div class="stat-row"><span class="stat-label">Time</span><span class="stat-value" id="quit-time"></span></div>
+          </div>
+          <div class="confirm-buttons">
+            <button id="btn-confirm-quit" class="btn btn-3d btn-danger">
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+              </span>
+              <span class="btn-text">YES, BACK HOME</span>
+            </button>
+            <button id="btn-cancel-quit" class="btn btn-3d btn-3d-secondary">
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" stroke="none" aria-hidden="true">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+              </span>
+              <span class="btn-text">RESUME PLAYING</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Run Complete -->
+      <div id="screen-run-complete" class="screen">
+        <div class="panel panel-run-complete">
+          <h2 class="run-complete-title">RUN COMPLETE!</h2>
+          <div class="run-complete-stats">
+            <div class="stat-row big"><span class="stat-label">Player</span><span class="stat-value" id="run-player"></span></div>
+            <div class="stat-row big"><span class="stat-label">Highest Level</span><span class="stat-value" id="run-level"></span></div>
+            <div class="stat-row"><span class="stat-label">Levels Completed</span><span class="stat-value" id="run-completed"></span></div>
+            <div class="stat-row"><span class="stat-label">Deaths</span><span class="stat-value" id="run-deaths"></span></div>
+            <div class="stat-row"><span class="stat-label">Total Time</span><span class="stat-value" id="run-time"></span></div>
+          </div>
+          <div class="run-complete-buttons">
+            <button id="btn-run-menu" class="btn btn-3d btn-3d-primary btn-large">
+              <span class="btn-3d-sheen" aria-hidden="true"></span>
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+              </span>
+              <span class="btn-text">BACK HOME</span>
+            </button>
+            <button id="btn-run-play-again" class="btn btn-3d btn-3d-secondary">
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>
+              </span>
+              <span class="btn-text">PLAY AGAIN</span>
+            </button>
+            <button id="btn-run-leaderboard" class="btn btn-3d btn-3d-secondary">
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+              </span>
+              <span class="btn-text">VIEW LEADERBOARD</span>
+            </button>
+            <button id="btn-new-player" class="btn btn-3d btn-3d-ghost">
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <span class="btn-text">CHANGE PLAYER</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Celebration Confetti Overlay Canvas -->
+      <canvas id="victory-canvas" class="victory-canvas"></canvas>
+
+      <!-- Dedicated End-Game Victory Screen -->
+      <div id="screen-victory" class="screen">
+        <div class="panel panel-victory">
+          <!-- Ambient Glow Accents -->
+          <div class="victory-light-burst" aria-hidden="true"></div>
+
+          <!-- Header -->
+          <div class="victory-header">
+            <div class="victory-badge-pill" id="victory-badge-pill">
+              <span class="victory-pill-dot"></span>
+              <span class="victory-pill-text" id="victory-pill-text">CHALLENGE CONQUERED</span>
+            </div>
+            <h1 class="victory-main-heading" id="victory-headline">THE GRAND ESCAPE</h1>
+            <p class="victory-subtitle" id="victory-subtitle">
+              Against all odds, every deceitful block, hidden spike, and psychological trap has been conquered.
+            </p>
+          </div>
+
+          <!-- THE PRESTIGIOUS HONORARY TITLE (Centerpiece) -->
+          <div class="victory-title-centerpiece" id="victory-title-card">
+            <div class="victory-crest-wrap">
+              <div class="victory-crest-glow"></div>
+              <div class="victory-crest-icon" id="victory-crest-icon">🏆</div>
+            </div>
+            <div class="victory-conferred-banner" id="victory-conferred-banner">
+              ★ HONORARY TITLE BESTOWED ★
+            </div>
+            <div class="victory-honorary-title" id="victory-honorary-title">
+              MASTER OF THE IMPOSSIBLE
+            </div>
+            <div class="victory-sub-rank" id="victory-sub-rank">
+              Supreme Champion of Trap Run • 20/20 Legitimate Clears
+            </div>
+            <div class="victory-seal-tag" id="victory-seal-tag">
+              OFFICIALLY CONFERRED &amp; PERMANENTLY RECORDED
+            </div>
+            <div class="victory-cheat-alert hidden" id="victory-cheat-alert">
+              <div class="cheat-alert-title">⚠️ ASSISTED COMPLETION DETECTED</div>
+              <div class="cheat-alert-desc" id="victory-cheat-desc">
+                Level skips or debug shortcuts were detected during this run. The honorary title is exclusively conferred upon true survivors who complete every level from Level 1 through Level 20 without assistance.
+              </div>
+            </div>
+          </div>
+
+          <!-- SUMMARY STATS -->
+          <div class="victory-stats-container">
+            <div class="v-stat-box">
+              <span class="v-stat-name">CHALLENGER</span>
+              <span class="v-stat-val val-gold" id="victory-player-name">—</span>
+            </div>
+            <div class="v-stat-box">
+              <span class="v-stat-name">LEVELS CLEARED</span>
+              <span class="v-stat-val val-emerald" id="victory-levels-summary">20 / 20</span>
+            </div>
+            <div class="v-stat-box">
+              <span class="v-stat-name">TOTAL DEATHS</span>
+              <span class="v-stat-val val-coral" id="victory-deaths">0</span>
+            </div>
+            <div class="v-stat-box">
+              <span class="v-stat-name">COMPLETION TIME</span>
+              <span class="v-stat-val val-cyan" id="victory-time">00:00.0</span>
+            </div>
+          </div>
+
+          <!-- ACTION BUTTONS -->
+          <div class="victory-action-buttons">
+            <button id="btn-victory-restart" class="btn btn-3d btn-3d-primary btn-large victory-btn-glow">
+              <span class="btn-3d-sheen" aria-hidden="true"></span>
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/>
+                </svg>
+              </span>
+              <span class="btn-text" id="victory-restart-text">PLAY AGAIN</span>
+            </button>
+            <button id="btn-victory-menu" class="btn btn-3d btn-3d-secondary">
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+              </span>
+              <span class="btn-text">MAIN MENU</span>
+            </button>
+            <button id="btn-victory-leaderboard" class="btn btn-3d btn-3d-secondary">
+              <span class="btn-3d-icon-wrap">
+                <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+              </span>
+              <span class="btn-text">LEADERBOARD</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div id="screen-leaderboard" class="screen">
+        <div class="panel panel-wide">
+          <h2 class="panel-title panel-title-3d">
+            <span class="title-3d-badge gold">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true">
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            HALL OF FAME
+          </h2>
+          <div class="leaderboard-table-container">
+            <table class="leaderboard-table" id="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Player</th>
+                  <th>Level</th>
+                  <th>Completed</th>
+                  <th>Deaths</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboard-body">
+              </tbody>
+            </table>
+            <p id="leaderboard-empty" class="empty-text hidden">No records yet. Be the first!</p>
+          </div>
+          <button id="btn-leaderboard-back" class="btn btn-3d btn-3d-ghost panel-back-btn">
+            <span class="btn-3d-icon-wrap">
+              <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12L11 6M5 12L11 18"/></svg>
+            </span>
+            <span class="btn-text">BACK HOME</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- My Record -->
+      <div id="screen-my-record" class="screen">
+        <div class="panel panel-wide">
+          <h2 class="panel-title panel-title-3d">
+            <span class="title-3d-badge cyan">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true">
+                <line x1="18" y1="20" x2="18" y2="10" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+                <line x1="12" y1="20" x2="12" y2="4" stroke="#e11d48" stroke-width="3" stroke-linecap="round"/>
+                <line x1="6" y1="20" x2="6" y2="14" stroke="#4ade80" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </span>
+            MY RECORD
+          </h2>
+          <div id="my-record-content">
+            <div id="my-record-need-name" class="empty-text">Enter a player name first to view records.</div>
+            <div id="my-record-data" class="hidden">
+              <div class="record-best">
+                <h3>Personal Best</h3>
+                <div class="stat-row big"><span class="stat-label">Best Level</span><span class="stat-value" id="record-level"></span></div>
+                <div class="stat-row"><span class="stat-label">Levels Completed</span><span class="stat-value" id="record-completed"></span></div>
+                <div class="stat-row"><span class="stat-label">Fewest Deaths</span><span class="stat-value" id="record-deaths"></span></div>
+                <div class="stat-row"><span class="stat-label">Best Time</span><span class="stat-value" id="record-time"></span></div>
+                <div class="stat-row"><span class="stat-label">Total Runs</span><span class="stat-value" id="record-runs"></span></div>
+              </div>
+              <div class="record-history">
+                <h3>Run History</h3>
+                <div id="record-history-list" class="history-list"></div>
+              </div>
+            </div>
+            <div id="my-record-not-found" class="empty-text hidden">No records found for this player.</div>
+          </div>
+          <button id="btn-record-back" class="btn btn-3d btn-3d-ghost panel-back-btn">
+            <span class="btn-3d-icon-wrap">
+              <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12L11 6M5 12L11 18"/></svg>
+            </span>
+            <span class="btn-text">BACK HOME</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div id="screen-settings" class="screen">
+        <div class="panel">
+          <h2 class="panel-title panel-title-3d">
+            <span class="title-3d-badge silver">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true">
+                <circle cx="12" cy="12" r="3" stroke="#cbd5e1" stroke-width="2"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="#94a3b8" stroke-width="1.8"/>
+              </svg>
+            </span>
+            SETTINGS
+          </h2>
+          <div class="settings-group settings-group-music">
+            <label class="setting-label" for="setting-music"><span class="setting-label-icon" aria-hidden="true">🎵</span> Music Volume</label>
+            <input type="range" id="setting-music" class="setting-slider" min="0" max="100" step="1" value="85" aria-label="Music Volume">
+            <span id="setting-music-val" class="setting-value" aria-live="polite">85%</span>
+          </div>
+          <div class="settings-group">
+            <label class="setting-label">Sound Effects</label>
+            <input type="range" id="setting-sfx" class="setting-slider" min="0" max="100" value="70">
+            <span id="setting-sfx-val" class="setting-value">70%</span>
+          </div>
+          <div class="settings-group">
+            <label class="setting-label">Screen Shake</label>
+            <input type="checkbox" id="setting-shake" class="setting-check" checked>
+          </div>
+          <div class="controls-info">
+            <h3>Controls</h3>
+            <div class="control-hint"><kbd>←</kbd><kbd>→</kbd> or <kbd>A</kbd><kbd>D</kbd> — Move</div>
+            <div class="control-hint"><kbd>Space</kbd> / <kbd>↑</kbd> / <kbd>W</kbd> — Jump</div>
+            <div class="control-hint"><kbd>R</kbd> — Restart Level</div>
+            <div class="control-hint"><kbd>Esc</kbd> / <kbd>P</kbd> — Pause / Home</div>
+          </div>
+          <button id="btn-settings-back" class="btn btn-3d btn-3d-ghost panel-back-btn">
+            <span class="btn-3d-icon-wrap">
+              <svg class="btn-3d-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12L11 6M5 12L11 18"/></svg>
+            </span>
+            <span class="btn-text">BACK HOME</span>
+          </button>
+        </div>
+      </div>
+
+
+    </div>
+    
+    <!-- Mobile Touch Controls -->
+    <div id="touch-controls" class="touch-controls hidden">
+      <div class="touch-left">
+        <button id="touch-btn-left" class="touch-btn touch-arrow">◀</button>
+        <button id="touch-btn-right" class="touch-btn touch-arrow">▶</button>
+      </div>
+      <div class="touch-right">
+        <button id="touch-btn-jump" class="touch-btn touch-jump">▲</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/audio.js?v=8"></script>
+  <script src="js/input.js?v=2"></script>
+  <script src="js/physics.js?v=2"></script>
+  <script src="js/camera.js?v=2"></script>
+  <script src="js/particles.js?v=2"></script>
+  <script src="js/traps.js?v=2"></script>
+  <script src="js/levels.js?v=2"></script>
+  <script src="js/player.js?v=2"></script>
+  <script src="js/renderer.js?v=2"></script>
+  <script src="js/api.js?v=2"></script>
+  <script src="js/ui.js?v=2"></script>
+  <script src="js/menu-scene.js?v=2"></script>
+  <script src="js/boss.js?v=4"></script>
+  <script src="js/main.js?v=5"></script>
+</body>
+</html>
