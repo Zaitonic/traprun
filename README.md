@@ -1,4 +1,4 @@
-# 🎮 TRAP RUN (Level Devil)
+# 🎮 TRAP RUN
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-traprun.vercel.app-brightgreen?style=for-the-badge&logo=vercel)](https://traprun.vercel.app)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Zaitonic%2Ftraprun-181717?style=for-the-badge&logo=github)](https://github.com/Zaitonic/traprun)
@@ -7,8 +7,8 @@
 [![HTML5 Canvas](https://img.shields.io/badge/Graphics-HTML5%20Canvas-E34F26?style=for-the-badge&logo=html5&logoColor=white)](public/js/renderer.js)
 [![Web Audio API](https://img.shields.io/badge/Audio-Procedural%20Web%20Audio-9B59B6?style=for-the-badge)](public/js/audio.js)
 
-> **A deceptive, adrenaline-pumping 2D psychological trap platformer.**  
-> Inspired by *Level Devil*, every step is a gamble, every platform is a lie, and the exit door might just run away from you. Can you survive all 20 levels and escape the final boss chase?
+> **A deceptive, adrenaline-pumping 2D psychological trap game.**  
+> Every step is a gamble, every platform is a lie, and the exit door might just run away from you. Can you survive all 20 levels and escape the final boss chase?
 
 ---
 

@@ -1,7 +1,7 @@
 {
   "name": "trap-run",
   "version": "1.0.0",
-  "description": "TRAP RUN — A challenging 2D trap-based platformer with local multiplayer and persistent leaderboard",
+  "description": "TRAP RUN — Can you survive?",
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
